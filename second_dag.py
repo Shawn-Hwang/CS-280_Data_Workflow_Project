@@ -28,10 +28,10 @@ with DAG(
     start_date=pendulum.datetime(2023, 1, 1, tz="US/Pacific"),
     catchup=False,
 ) as dag:
-    start_task = DummyOperator(task_id="step_0")
-    first_task = PythonOperator(task_id="step_1", python_callable=first_task_function)
-    second_task = PythonOperator(task_id="step_2", python_callable=second_task_function)
-    third_task = PythonOperator(task_id="step_3", python_callable=third_task_function)
-    end_task = DummyOperator(task_id="step_4")
+    start_task = DummyOperator(task_id="step_00")
+    first_task = PythonOperator(task_id="step_01", python_callable=first_task_function)
+    second_task = PythonOperator(task_id="step_02", python_callable=second_task_function)
+    third_task = PythonOperator(task_id="step_03", python_callable=third_task_function)
+    end_task = DummyOperator(task_id="step_04")
 
-start_task >> first_task >> second_task >> third_task >> end_task
+start_task >> first_task >> third_task >> second_task >> end_task
