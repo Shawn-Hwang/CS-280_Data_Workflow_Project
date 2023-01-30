@@ -9,6 +9,8 @@ from airflow.models import TaskInstance
 def get_twitter_api_data_task(ti: TaskInstance, **kwargs):
     
     pass
+    log.info(f"Get users and tweets.")
+    return
 
 
 with DAG(
@@ -21,4 +23,4 @@ with DAG(
                                 python_callable=get_twitter_api_data_task,
                                 provide_context=True)
 
-first_task
+first_task >> first_task
