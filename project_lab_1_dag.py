@@ -14,9 +14,12 @@ import pandas as pd
 def get_twitter_api_data_func(ti: TaskInstance, **kwargs):
 
     # Get Bearer token, user list, and tweet list
-    bearer_token = Variable.get("TWITTER_BEARER_TOKEN", deserialize_json=True)
-    user_list = Variable.get("TWITTER_USER_IDS",[],deserialize_json=True)
-    tweet_list = Variable.get("TWITTER_TWEET_IDS",[],deserialize_json=True)
+    # bearer_token = Variable.get("TWITTER_BEARER_TOKEN", deserialize_json=True)
+    # user_list = Variable.get("TWITTER_USER_IDS",[],deserialize_json=True)
+    # tweet_list = Variable.get("TWITTER_TWEET_IDS",[],deserialize_json=True)
+    bearer_token = 'AAAAAAAAAAAAAAAAAAAAAPgnlgEAAAAAfbguIgh3wwfZUrWkeizpD%2BXKtXA%3DIMVi3vlwxJbTNYLGMbUzW5BwkbTdVO7ZjxLHmxjrio0bwzqXRI'
+    user_list = [44196397,62513246,11348282,5162861,1349149096909668363]
+    tweet_list = [1617886106921611270,1617975448641892352,1616850613697921025,1620119674913447940,1620110094997266432]
 
     # Create the authentication header
     authentication_header = {"Authorization": f"Bearer {bearer_token}"}
