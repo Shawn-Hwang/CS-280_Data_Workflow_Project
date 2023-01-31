@@ -44,6 +44,7 @@ def get_twitter_api_data_func(ti: TaskInstance, **kwargs):
     # Run request for every single tweet-id
     for tweet_id in tweet_list:
         api_url = f'https://api.twitter.com/2/tweets/{tweet_id}?tweet.fields=author_id,public_metrics,text'
+        request = requests.get(api_url, headers=authentication_header)
 
         # Check status code
         if request.status_code != 200:
@@ -80,6 +81,7 @@ def create_user_df(user_results):
     return user_df
 
 def create_tweet_df(tweet_results):
+
     tweet_ids = [t['data']['id'] for t in tweet_results]
     texts = [t['data']['text'] for t in tweet_results]
     retweet_count = [t['data']['public_metrics']['retweet_count'] for t in tweet_results]
