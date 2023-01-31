@@ -7,6 +7,8 @@ from airflow.operators.dummy import DummyOperator
 from airflow.models import Variable
 from airflow.models import TaskInstance
 from google.cloud import storage
+from gcsfs import GCSFileSystem
+from databox import Client
 import pandas as pd
 
 def get_twitter_api_data_func(ti: TaskInstance, **kwargs):
@@ -112,6 +114,49 @@ def transform_twitter_api_data_func(ti: TaskInstance, **kwargs):
     bucket.blob("data/project_lab_1_tweets.csv").upload_from_string(tweet_df.to_csv(index=False), "text/csv")
     return
 
+def push_data_to_databox_func():
+
+    user_token = "k7oy27jcfqsui5dh1nrqe"
+
+    # Intialize the databox client
+    dbox = Client(user_token)
+
+    # Retrieve info from google cloud bucket
+    fs = GCSFileSystem(project="s-h-apache-airflow-cs280")
+    with fs.open('gs://s-h-apache-airflow-cs280/data/project_lab_1_users.csv', 'rb') as f:
+        user_df = pd.read_csv(f)
+    with fs.open('gs://s-h-apache-airflow-cs280/data/project_lab_1_tweets.csv', 'rb') as f:
+        tweet_df = pd.read_csv(f)
+    
+    # Create a metric for each user and push to databox
+    for user in user_df['name'].values:
+        metric_name = user.replace(' ', '_').lower()
+        target_row = user_df.loc[user_df['name'] == f'{user}']
+        followers_count = target_row['followers_count'].values[0]
+        following_count = target_row['following_count'].values[0]
+        tweet_count = target_row['tweet_count'].values[0]
+        listed_count = target_row['listed_count'].values[0]
+
+        dbox.push(f"{metric_name}_followers_count", followers_count)
+        dbox.push(f"{metric_name}_following_count", following_count)
+        dbox.push(f"{metric_name}_tweet_count", tweet_count)
+        dbox.push(f"{metric_name}_listed_count", listed_count)
+    
+    # Create a metric for each tweet and push to databox
+    for tweet in tweet_df['tweet_id'].values:
+        target_row = tweet_df.loc[tweet_df['tweet_id'] == f'{tweet}']
+        reply_count = target_row['reply_count'].values[0]
+        like_count = target_row['like_count'].values[0]
+        impression_count = target_row['impression_count'].values[0]
+        retweet_count = target_row['retweet_count'].values[0]
+
+        dbox.push(f"{tweet}_reply_count", reply_count)
+        dbox.push(f"{tweet}_like_count", like_count)
+        dbox.push(f"{tweet}_impression_count", impression_count)
+        dbox.push(f"{tweet}_retweet_count", retweet_count)
+
+    return
+
 with DAG(
     dag_id="project_lab_1_etl",
     schedule_interval="0 9 * * *",
@@ -124,5 +169,7 @@ with DAG(
     second_task = PythonOperator(task_id="transform_twitter_api_data_task",
                                 python_callable=transform_twitter_api_data_func,
                                 provide_context=True)
+    third_task = PythonOperator(task_id="push_data_to_databox_task",
+                                python_callable=push_data_to_databox_func)
 
-first_task >> second_task
+first_task >> second_task >> third_task
