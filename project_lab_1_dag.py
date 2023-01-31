@@ -176,4 +176,4 @@ with DAG(
     third_task = PythonOperator(task_id="push_data_to_databox_task",
                                 python_callable=push_data_to_databox_func)
 
-first_task >> second_task >> third_task
+    first_task >> second_task >> third_task
