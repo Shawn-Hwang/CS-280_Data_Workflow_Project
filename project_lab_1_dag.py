@@ -171,7 +171,7 @@ def push_data_to_databox_func():
         except IndexError as e:
             log.info(e)
             log.info(data)
-            log.info(target_row['reply_count'])
+            # log.info(target_row['reply_count'])
 
     return
 
