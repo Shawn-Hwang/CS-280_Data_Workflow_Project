@@ -130,9 +130,9 @@ def push_data_to_databox_func():
 
     # Retrieve info from google cloud bucket
     fs = GCSFileSystem(project="shawn-huang-cs-280-375620")
-    with fs.open('gs://s-h-apache-airflow-cs280/data/project_lab_1_users.csv', 'rb') as f:
+    with fs.open('s-h-apache-airflow-cs280/data/project_lab_1_users.csv', 'rb') as f:
         user_df = pd.read_csv(f)
-    with fs.open('gs://s-h-apache-airflow-cs280/data/project_lab_1_tweets.csv', 'rb') as f:
+    with fs.open('s-h-apache-airflow-cs280/data/project_lab_1_tweets.csv', 'rb') as f:
         tweet_df = pd.read_csv(f)
     
     # Create a metric for each user and push to databox
