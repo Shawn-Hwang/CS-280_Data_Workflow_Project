@@ -134,6 +134,9 @@ def push_data_to_databox_func():
         user_df = pd.read_csv(f)
     with fs.open('s-h-apache-airflow-cs280/data/project_lab_1_tweets.csv', 'rb') as f:
         tweet_df = pd.read_csv(f)
+
+    log.info(user_df.to_dict())
+    log.info(tweet_df.to_dict())
     
     # Create a metric for each user and push to databox
     for user in user_df['name'].values:
