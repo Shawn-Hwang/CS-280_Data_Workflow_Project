@@ -112,6 +112,7 @@ def transform_twitter_api_data_func(ti: TaskInstance, **kwargs):
 
     # Create the tweet df
     tweet_df = create_tweet_df(tweet_results)
+    log.info(tweet_df.to_dict())
     
     # Upload CSVs to Bucket
     client = storage.Client()
