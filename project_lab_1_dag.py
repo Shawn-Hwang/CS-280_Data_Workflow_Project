@@ -10,6 +10,7 @@ from google.cloud import storage
 from gcsfs import GCSFileSystem
 from databox import Client
 import pandas as pd
+import numpy as np
 
 def get_twitter_api_data_func(ti: TaskInstance, **kwargs):
 
@@ -137,10 +138,10 @@ def push_data_to_databox_func():
     for user in user_df['name'].values:
         metric_name = user.replace(' ', '_').lower()
         target_row = user_df.loc[user_df['name'] == f'{user}']
-        followers_count = target_row['followers_count'].values[0]
-        following_count = target_row['following_count'].values[0]
-        tweet_count = target_row['tweet_count'].values[0]
-        listed_count = target_row['listed_count'].values[0]
+        followers_count = target_row['followers_count'].values.astype(np.int32)[0]
+        following_count = target_row['following_count'].values.astype(np.int32)[0]
+        tweet_count = target_row['tweet_count'].values.astype(np.int32)[0]
+        listed_count = target_row['listed_count'].values.astype(np.int32)[0]
 
         dbox.push(f"{metric_name}_followers_count", followers_count)
         dbox.push(f"{metric_name}_following_count", following_count)
@@ -150,10 +151,10 @@ def push_data_to_databox_func():
     # Create a metric for each tweet and push to databox
     for tweet in tweet_df['tweet_id'].values:
         target_row = tweet_df.loc[tweet_df['tweet_id'] == f'{tweet}']
-        reply_count = target_row['reply_count'].values[0]
-        like_count = target_row['like_count'].values[0]
-        impression_count = target_row['impression_count'].values[0]
-        retweet_count = target_row['retweet_count'].values[0]
+        reply_count = target_row['reply_count'].values.astype(np.int32)[0]
+        like_count = target_row['like_count'].values.astype(np.int32)[0]
+        impression_count = target_row['impression_count'].values.astype(np.int32)[0]
+        retweet_count = target_row['retweet_count'].values.astype(np.int32)[0]
 
         dbox.push(f"{tweet}_reply_count", reply_count)
         dbox.push(f"{tweet}_like_count", like_count)
