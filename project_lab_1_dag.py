@@ -149,17 +149,24 @@ def push_data_to_databox_func():
         dbox.push(f"{metric_name}_listed_count", int(listed_count))
     
     # Create a metric for each tweet and push to databox
-    for tweet in tweet_df['tweet_id'].values:
-        target_row = tweet_df.loc[tweet_df['tweet_id'] == f'{tweet}']
-        reply_count = target_row['reply_count'].values[0]
-        like_count = target_row['like_count'].values[0]
-        impression_count = target_row['impression_count'].values[0]
-        retweet_count = target_row['retweet_count'].values[0]
+  
 
-        dbox.push(f"{tweet}_reply_count", int(reply_count))
-        dbox.push(f"{tweet}_like_count", int(like_count))
-        dbox.push(f"{tweet}_impression_count", int(impression_count))
-        dbox.push(f"{tweet}_retweet_count", int(retweet_count))
+    for tweet in tweet_df['tweet_id'].values:
+        try:
+            target_row = tweet_df.loc[tweet_df['tweet_id'] == f'{tweet}']
+            reply_count = target_row['reply_count'].values[0]
+            like_count = target_row['like_count'].values[0]
+            impression_count = target_row['impression_count'].values[0]
+            retweet_count = target_row['retweet_count'].values[0]
+
+            dbox.push(f"{tweet}_reply_count", int(reply_count))
+            dbox.push(f"{tweet}_like_count", int(like_count))
+            dbox.push(f"{tweet}_impression_count", int(impression_count))
+            dbox.push(f"{tweet}_retweet_count", int(retweet_count))
+
+        except IndexError:
+            log.info(tweet)
+            log.info(target_row['reply_count'])
 
     return
 
