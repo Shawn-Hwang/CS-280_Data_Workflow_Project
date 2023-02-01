@@ -168,7 +168,8 @@ def push_data_to_databox_func():
             dbox.push(f"{tweet}_impression_count", int(impression_count))
             dbox.push(f"{tweet}_retweet_count", int(retweet_count))
 
-        except IndexError:
+        except IndexError as e:
+            log.info(e)
             log.info(tweet)
             log.info(target_row['reply_count'])
 
