@@ -1,5 +1,5 @@
-from models.config import Session #You would import this from your config file
-from models.users import User
+from config import Session #You would import this from your config file
+from users import User
 from datetime import datetime
 
 session = Session()
