@@ -18,7 +18,7 @@ def get_twitter_api_data_func(ti: TaskInstance, **kwargs):
     # bearer_token = Variable.get("TWITTER_BEARER_TOKEN", deserialize_json=True)
     # user_list = Variable.get("TWITTER_USER_IDS",[],deserialize_json=True)
     # tweet_list = Variable.get("TWITTER_TWEET_IDS",[],deserialize_json=True)
-    bearer_token = 'AAAAAAAAAAAAAAAAAAAAAPgnlgEAAAAAfbguIgh3wwfZUrWkeizpD%2BXKtXA%3DIMVi3vlwxJbTNYLGMbUzW5BwkbTdVO7ZjxLHmxjrio0bwzqXRI'
+    bearer_token = 'AAAAAAAAAAAAAAAAAAAAADyxlQEAAAAAOVo8JJxuAA6l1RI%2BPF04u9pzdL8%3Dm2rimTHbpVx5HRm22oAAvdDHvomOKFgmeeg8JwTYtEVTVJK8Cf'
     user_list = [44196397,62513246,11348282,5162861,1349149096909668363]
     tweet_list = [1617886106921611270,1617975448641892352,1616850613697921025,1614321457399578624,1619334652031819782]
 
