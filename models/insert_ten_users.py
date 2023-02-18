@@ -4,6 +4,7 @@ from datetime import datetime
 
 session = Session()
 user = User(
+            id=1,
             user_id=112345,
             username="CrazyCatLady1001",
             name="Mariana Ramierez",
