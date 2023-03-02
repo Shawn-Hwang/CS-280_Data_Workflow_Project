@@ -13,8 +13,8 @@ user = User(
 # Add the user
 session.add(user)
 
-#Commit your changes to the database
+# Commit your changes to the database
 session.commit()
 
-#Close the connection
+# Close the connection
 session.close()

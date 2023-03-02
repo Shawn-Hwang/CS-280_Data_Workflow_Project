@@ -5,8 +5,8 @@ Base = declarative_base()
 
 class User(Base):
     __tablename__ = "users"
-    id = Column(Integer, primary_key=True, not_null=True)
-    user_id = Column(String, not_null=True)
+    id = Column(Integer, primary_key=True, nullable=False)
+    user_id = Column(String, nullable=False)
     username = Column(String)
     name = Column(String)
     created_at = Column(Date)
