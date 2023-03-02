@@ -10,8 +10,8 @@ user = User(
             created_at=datetime.now()
           )
 
-#Add the user
-# session.add(user)
+# Add the user
+session.add(user)
 
 #Commit your changes to the database
 session.commit()
