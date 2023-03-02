@@ -5,8 +5,8 @@ Base = declarative_base()
 
 class TweetTimeSeries(Base):
     __tablename__ = "tweet_timeseries"
-    id = Column(Integer, primary_key=True, not_null=True)
-    tweet_id = Column(Integer, not_null=True)
+    id = Column(Integer, primary_key=True, nullable=False)
+    tweet_id = Column(String, nullable=False)
     retweet_count = Column(Integer)
     favorite_count = Column(Integer)
     date = Column(Date)

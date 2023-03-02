@@ -5,8 +5,8 @@ Base = declarative_base()
 
 class UserTimeSeries(Base):
     __tablename__ = "user_timeseries"
-    id = Column(Integer, primary_key=True, not_null=True)
-    user_id = Column(Integer, not_null=True)
+    id = Column(Integer, primary_key=True, nullable=False)
+    user_id = Column(String, nullable=False)
     followers_count = Column(Integer)
     following_count = Column(Integer)
     tweet_count = Column(Integer)
