@@ -177,7 +177,7 @@ def transform_data_task_func(ti: TaskInstance, **kwargs):
                 favorite_count.append(tweet['favorite_count'])
                 newly_retrieved.append(True)
     date = [curr_date for _ in range(len(new_tweet_ids))]
-    
+
     log.info(f'Length of last_tweets_results: {len(last_tweets_results)}')
     log.info(f'Length of new_tweet_ids: {len(new_tweet_ids)}')
     log.info(f'Length of user_ids: {len(user_ids)}')
@@ -205,7 +205,7 @@ def transform_data_task_func(ti: TaskInstance, **kwargs):
     # Send CSVs to Google Bucket
     client = storage.Client()
     bucket = client.get_bucket("s-h-apache-airflow-cs280")
-    date_str = curr_tweet_df.strftime("%Y_%M_%D_%H:%M:%S")
+    date_str = curr_date.strftime("%Y_%M_%D_%H:%M:%S")
     bucket.blob(f"data/project_lab_2_users.csv").upload_from_string(user_df.to_csv(index=False), "text/csv")
     bucket.blob(f"data/project_lab_2_tweets.csv").upload_from_string(tweet_df.to_csv(index=False), "text/csv")
 
