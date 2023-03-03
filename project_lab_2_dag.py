@@ -179,6 +179,14 @@ def transform_data_task_func(ti: TaskInstance, **kwargs):
                 newly_retrieved.append(True)
 
     log.info(f'Length of last_tweets_results: {len(last_tweets_results)}')
+    log.info(f'Length of new_tweet_ids: {len(new_tweet_ids)}')
+    log.info(f'Length of user_ids: {len(user_ids)}')
+    log.info(f'Length of texts: {len(texts)}')
+    log.info(f'Length of created_at: {len(created_at)}')
+    log.info(f'Length of retweet_count: {len(retweet_count)}')
+    log.info(f'Length of favorite_count: {len(favorite_count)}')
+    log.info(f'Length of newly_retrieved: {len(newly_retrieved)}')
+    log.info(f'Length of date: {len(date)}')
     
 
     # Make df for newly retrieved tweets
