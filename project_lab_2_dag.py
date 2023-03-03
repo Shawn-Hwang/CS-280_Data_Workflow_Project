@@ -8,11 +8,16 @@ from airflow.models import Variable
 from airflow.models import TaskInstance
 import pandas as pd
 import numpy as np
+from models.config import Session #You would import this from your config file
+from models.users import User
 
-
+def pull_user_info_task_func(ti: TaskInstance, **kwargs):
+    session = Session()
+    
+    return
 
 with DAG(
-    dag_id="project_lab_1_etl",
+    dag_id="project_lab_2",
     schedule_interval="0 9 * * *",
     # schedule_interval=None,
     start_date=pendulum.datetime(2023, 2, 19, tz="US/Pacific"),
