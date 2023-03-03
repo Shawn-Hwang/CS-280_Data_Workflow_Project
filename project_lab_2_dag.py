@@ -214,8 +214,8 @@ def transform_data_task_func(ti: TaskInstance, **kwargs):
 
 
 def write_data_task_func(ti: TaskInstance, **kwargs):
-    # Get date from last task
-    date = ti.xcom_pull(key="date", task_ids="transform_data_task")
+    # # Get date from last task
+    # date = ti.xcom_pull(key="date", task_ids="transform_data_task")
 
     # Retrieve info from google cloud bucket
     fs = GCSFileSystem(project="shawn-huang-cs-280-375620")
@@ -225,6 +225,7 @@ def write_data_task_func(ti: TaskInstance, **kwargs):
         tweet_df = pd.read_csv(f)
 
     session = Session()
+    date = user_df['date'].values[0]
 
     log.info(user_df.to_dict())
     # Add all users' statistics to user_timeseries table
