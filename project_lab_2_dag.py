@@ -210,7 +210,7 @@ def transform_data_task_func(ti: TaskInstance, **kwargs):
     bucket.blob(f"data/project_lab_2_tweets.csv").upload_from_string(tweet_df.to_csv(index=False), "text/csv")
 
     # Pass date to the next task
-    ti.xcom_push("date", curr_date)
+    ti.xcom_push("date", curr_date.strftime("%Y_%M_%D_%H:%M:%S"))
 
 
 def write_data_task_func(ti: TaskInstance, **kwargs):
