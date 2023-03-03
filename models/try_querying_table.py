@@ -6,8 +6,9 @@ session = Session()
 
 # This will retrieve all of the users from the database 
 # (It'll be a list, so you may have 100 users or 0 users)
-users_lst = session.query(User).all() 
-print(users_lst)
+users_lst = session.query(User).all()
+user_ids = [u.user_id for u in users_lst]
+print(user_ids)
 
 # This will retrieve the user who's username is NASA
 nasaUser = session.query(User).filter(User.username == "POTUS").first()
