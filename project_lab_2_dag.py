@@ -201,16 +201,21 @@ def transform_data_task_func(ti: TaskInstance, **kwargs):
     
     # Concatenate two tweet dfs into one
     tweet_df = pd.concat([curr_tweet_df, new_tweet_df])
+    
 
     # Send CSVs to Google Bucket
     client = storage.Client()
     bucket = client.get_bucket("s-h-apache-airflow-cs280")
-    date_str = curr_date.strftime("%Y_%M_%D_%H:%M:%S")
     bucket.blob(f"data/project_lab_2_users.csv").upload_from_string(user_df.to_csv(index=False), "text/csv")
     bucket.blob(f"data/project_lab_2_tweets.csv").upload_from_string(tweet_df.to_csv(index=False), "text/csv")
 
+    # Pass date to the next task
+    ti.xcom_push("date", curr_date)
+
 
 def write_data_task_func(ti: TaskInstance, **kwargs):
+    # Get date from last task
+    date = ti.xcom_pull(key="date", task_ids="transform_data_task")
 
     # Retrieve info from google cloud bucket
     fs = GCSFileSystem(project="shawn-huang-cs-280-375620")
@@ -221,8 +226,49 @@ def write_data_task_func(ti: TaskInstance, **kwargs):
 
     session = Session()
 
-    # Update user_timeseries table
-    print(233)
+    # Add all users' statistics to user_timeseries table
+    for user_id in user_df['user_id'].values:
+        target_row = user_df.loc[user_df['user_id'] == f'{user_id}']
+        user_timeseries = UserTimeSeries(
+            user_id=user_id,
+            followers_count = target_row['followers_count'].values[0],
+            following_count = target_row['following_count'].values[0],
+            tweet_count = target_row['tweet_count'].values[0],
+            listed_count = target_row['listed_count'].values[0],
+            date = date
+          )
+        session.add(user_timeseries) 
+    
+    # Add new tweets to the tweet table
+    new_tweets = tweet_df.loc[tweet_df['newly_retrieved'] == 1]
+    for tweet_id in new_tweets['tweet_id'].values:
+        target_row = new_tweets.loc[new_tweets['tweet_id'] == f'{tweet_id}']
+        new_tweet = Tweet(
+            tweet_id = tweet_id,
+            user_id = target_row['user_id'].values[0],
+            text = target_row['text'].values[0],
+            created_at = target_row['created_at'].values[0]
+        )
+        session.add(new_tweet) 
+
+    # Update tweet_timeseries table
+    for tweet_id in tweet_df['tweet_id'].values:
+        target_row = tweet_df.loc[tweet_df['tweet_id'] == f'{tweet_id}']
+        tweet_timeseries = TweetTimeSeries(
+            tweet_id = tweet_id,
+            retweet_count = target_row['retweet_count'].values[0],
+            favorite_count = target_row['favorite_count'].values[0],
+            date = date
+        )
+        session.add(tweet_timeseries)
+
+
+
+    # Commit your changes to the database
+    session.commit()
+
+    # Close the connection
+    session.close()
 
 
     return
