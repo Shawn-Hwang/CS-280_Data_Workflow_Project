@@ -33,8 +33,8 @@ user_3 = User(
 
 user_4 = User(
             user_id=1349149096909668363,
-            username="President Biden",
-            name="POTUS",
+            username="POTUS",
+            name="President Biden",
             created_at=datetime.now()
           )
 
