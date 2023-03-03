@@ -232,11 +232,11 @@ def write_data_task_func(ti: TaskInstance, **kwargs):
         target_row = user_df.loc[user_df['user_id'] == user_id]
         log.info(f'Length of target tow: {len(target_row)}')
         user_timeseries = UserTimeSeries(
-            user_id=user_id,
-            followers_count = target_row['followers_count'].values[0],
-            following_count = target_row['following_count'].values[0],
-            tweet_count = target_row['tweet_count'].values[0],
-            listed_count = target_row['listed_count'].values[0],
+            user_id=str(user_id),
+            followers_count = int(target_row['followers_count'].values[0]),
+            following_count = int(target_row['following_count'].values[0]),
+            tweet_count = int(target_row['tweet_count'].values[0]),
+            listed_count = int(target_row['listed_count'].values[0]),
             date = date
           )
         session.add(user_timeseries) 
@@ -246,10 +246,10 @@ def write_data_task_func(ti: TaskInstance, **kwargs):
     for tweet_id in new_tweets['tweet_id'].values:
         target_row = new_tweets.loc[new_tweets['tweet_id'] == tweet_id]
         new_tweet = Tweet(
-            tweet_id = tweet_id,
-            user_id = target_row['user_id'].values[0],
-            text = target_row['text'].values[0],
-            created_at = target_row['created_at'].values[0]
+            tweet_id = str(tweet_id),
+            user_id = int(target_row['user_id'].values[0]),
+            text = str(target_row['text'].values[0]),
+            created_at = str(target_row['created_at'].values[0])
         )
         session.add(new_tweet) 
 
@@ -257,9 +257,9 @@ def write_data_task_func(ti: TaskInstance, **kwargs):
     for tweet_id in tweet_df['tweet_id'].values:
         target_row = tweet_df.loc[tweet_df['tweet_id'] == tweet_id]
         tweet_timeseries = TweetTimeSeries(
-            tweet_id = tweet_id,
-            retweet_count = target_row['retweet_count'].values[0],
-            favorite_count = target_row['favorite_count'].values[0],
+            tweet_id = str(tweet_id),
+            retweet_count = int(target_row['retweet_count'].values[0]),
+            favorite_count = int(target_row['favorite_count'].values[0]),
             date = date
         )
         session.add(tweet_timeseries)
