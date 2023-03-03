@@ -26,7 +26,9 @@ def load_data_task_func(ti: TaskInstance, **kwargs):
 
     # Get all tweet_ids
     tweets_lst = session.query(Tweet).all()
-    tweet_ids = [(t.tweet_id, t.user_id) for t in tweets_lst]
+    tweet_ids = []
+    if len(tweets_lst) > 0:
+        tweet_ids = [(t.tweet_id, t.user_id) for t in tweets_lst]
     log.info(f"Pulled tweets: {len(tweet_ids)}.")
 
     # Pass user_ids and tweet_ids to the next task thru xcom
@@ -66,18 +68,19 @@ def call_api_task_func(ti: TaskInstance, **kwargs):
 
 
     # Run request for every single tweet-id
-    for tweet_id_pair in tweet_ids:
-        tweet_id = tweet_id_pair[0]
-        api_url = f'https://api.twitter.com/2/tweets/{tweet_id}?tweet.fields=author_id,public_metrics,text'
-        request = requests.get(api_url, headers=authentication_header)
+    if len(tweet_ids) > 0:
+        for tweet_id_pair in tweet_ids:
+            tweet_id = tweet_id_pair[0]
+            api_url = f'https://api.twitter.com/2/tweets/{tweet_id}?tweet.fields=author_id,public_metrics,text'
+            request = requests.get(api_url, headers=authentication_header)
 
-        # Check status code
-        if request.status_code != 200:
-            log.info(f"Failed to get the info of tweet: {tweet_id}.")
-        else:
-            result = request.json()
-            log.info(result)
-            tweet_results.append(result)
+            # Check status code
+            if request.status_code != 200:
+                log.info(f"Failed to get the info of tweet: {tweet_id}.")
+            else:
+                result = request.json()
+                log.info(result)
+                tweet_results.append(result)
 
     # Pass all information to the next task
     ti.xcom_push("tweet_results", tweet_results)
@@ -221,9 +224,17 @@ with DAG(
     start_date=pendulum.datetime(2023, 3, 5, tz="US/Pacific"),
     catchup=False,
 ) as dag:
-    load_data_task = DummyOperator(task_id="load_data_task")
-    call_api_task = DummyOperator(task_id="call_api_task")
-    transform_data_task = DummyOperator(task_id="transform_data_task")
-    write_data_task = DummyOperator(task_id="write_data_task")
+    load_data_task = PythonOperator(task_id="load_data_task",
+                                    python_callable=load_data_task_func,
+                                    provide_context=True)
+    call_api_task = PythonOperator(task_id="call_api_task",
+                                   python_callable=call_api_task_func,
+                                   provide_context=True)
+    transform_data_task = PythonOperator(task_id="transform_data_task",
+                                         python_callable=transform_data_task_func,
+                                         provide_context=True)
+    write_data_task = PythonOperator(task_id="write_data_task",
+                                     python_callable=write_data_task_func,
+                                     provide_context=True)
 
     load_data_task >> call_api_task >> transform_data_task >> write_data_task
