@@ -221,7 +221,7 @@ with DAG(
     dag_id="project_lab_2",
     schedule_interval="0 9 * * *",
     # schedule_interval=None,
-    start_date=pendulum.datetime(2023, 3, 5, tz="US/Pacific"),
+    start_date=pendulum.datetime(2023, 3, 1, tz="US/Pacific"),
     catchup=False,
 ) as dag:
     load_data_task = PythonOperator(task_id="load_data_task",
