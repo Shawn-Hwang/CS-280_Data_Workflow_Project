@@ -226,9 +226,10 @@ def write_data_task_func(ti: TaskInstance, **kwargs):
 
     session = Session()
 
+    log.info(user_df.to_dict())
     # Add all users' statistics to user_timeseries table
     for user_id in user_df['user_id'].values:
-        target_row = user_df.loc[user_df['user_id'] == f'{user_id}']
+        target_row = user_df.loc[user_df['user_id'] == user_id]
         user_timeseries = UserTimeSeries(
             user_id=user_id,
             followers_count = target_row['followers_count'].values[0],
@@ -242,7 +243,7 @@ def write_data_task_func(ti: TaskInstance, **kwargs):
     # Add new tweets to the tweet table
     new_tweets = tweet_df.loc[tweet_df['newly_retrieved'] == 1]
     for tweet_id in new_tweets['tweet_id'].values:
-        target_row = new_tweets.loc[new_tweets['tweet_id'] == f'{tweet_id}']
+        target_row = new_tweets.loc[new_tweets['tweet_id'] == tweet_id]
         new_tweet = Tweet(
             tweet_id = tweet_id,
             user_id = target_row['user_id'].values[0],
