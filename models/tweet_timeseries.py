@@ -12,5 +12,5 @@ class TweetTimeSeries(Base):
     date = Column(Date)
     
     def __repr__(self) -> str:
-        return f"TweetTimeSeries(id={self.id}, user_id={self.user_id}, nt={self.following_count}, retweet_count={self.retweet_count}, \
+        return f"TweetTimeSeries(id={self.id}, tweet_id={self.tweet_id}, retweet_count={self.retweet_count}, \
                  favorite_count={self.favorite_count}, date={self.date})" 
