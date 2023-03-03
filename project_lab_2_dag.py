@@ -255,7 +255,7 @@ def write_data_task_func(ti: TaskInstance, **kwargs):
 
     # Update tweet_timeseries table
     for tweet_id in tweet_df['tweet_id'].values:
-        target_row = tweet_df.loc[tweet_df['tweet_id'] == f'{tweet_id}']
+        target_row = tweet_df.loc[tweet_df['tweet_id'] == tweet_id]
         tweet_timeseries = TweetTimeSeries(
             tweet_id = tweet_id,
             retweet_count = target_row['retweet_count'].values[0],
