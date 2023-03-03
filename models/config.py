@@ -1,4 +1,4 @@
-from airflow.models import Variable
+# from airflow.models import Variable
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
