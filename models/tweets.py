@@ -5,9 +5,9 @@ Base = declarative_base()
 
 class Tweet(Base):
     __tablename__ = "tweets"
-    id = Column(Integer, primary_key=True, not_null=True)
-    tweet_id = Column(Integer, not_null=True)
-    user_id = Column(Integer)
+    id = Column(Integer, primary_key=True, nullable=False)
+    tweet_id = Column(String, nullable=False)
+    user_id = Column(String)
     text = Column(String)
     created_at = Column(Date)
     
