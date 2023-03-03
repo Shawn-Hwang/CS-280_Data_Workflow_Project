@@ -230,6 +230,7 @@ def write_data_task_func(ti: TaskInstance, **kwargs):
     # Add all users' statistics to user_timeseries table
     for user_id in user_df['user_id'].values:
         target_row = user_df.loc[user_df['user_id'] == user_id]
+        log.info(f'Length of target tow: {len(target_row)}')
         user_timeseries = UserTimeSeries(
             user_id=user_id,
             followers_count = target_row['followers_count'].values[0],
