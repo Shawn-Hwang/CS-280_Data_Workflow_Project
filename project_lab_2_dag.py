@@ -163,7 +163,6 @@ def transform_data_task_func(ti: TaskInstance, **kwargs):
     retweet_count = []
     favorite_count = []
     newly_retrieved = []
-    date = [curr_date for _ in range(len(new_tweet_ids))]
 
     for each_user in last_tweets_results:
         for tweet in each_user:
@@ -177,7 +176,8 @@ def transform_data_task_func(ti: TaskInstance, **kwargs):
                 retweet_count.append(tweet['retweet_count'])
                 favorite_count.append(tweet['favorite_count'])
                 newly_retrieved.append(True)
-
+    date = [curr_date for _ in range(len(new_tweet_ids))]
+    
     log.info(f'Length of last_tweets_results: {len(last_tweets_results)}')
     log.info(f'Length of new_tweet_ids: {len(new_tweet_ids)}')
     log.info(f'Length of user_ids: {len(user_ids)}')
